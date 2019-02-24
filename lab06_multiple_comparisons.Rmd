@@ -1,0 +1,89 @@
+---
+title: "Lab06 - multiple comparisons"
+output: pdf_document
+---
+
+## Goals
+
+The goal in this lab is to practice finding familywise conidence intervals for multiple comparisons.
+
+## Loading packages
+
+Here are some packages with functionality you may need for this lab.  Run this code chunk now.
+
+```{r}
+library(readr)
+library(ggplot2)
+library(gridExtra)
+library(mosaic)
+library(dplyr)
+library(gmodels)
+
+options("pillar.sigfig" = 10) # print 10 significant digits in summarize output
+
+longevity <- read_csv("http://www.evanlray.com/data/sleuth3/ex0501_longevity.csv") %>%
+  mutate(
+    Diet = factor(Diet, levels = c("NP", "N/N85", "N/R50", "R/R50", "lopro", "N/R40"))
+  )
+
+nrow(longevity)
+```
+
+#### Find the multiplier that would be used for Bonferroni 95% familywise intervals for 5 comparisons based on this data set.
+
+```{r}
+
+```
+
+#### Find the multiplier that would be used for Scheffe 95% familywise intervals for 5 comparisons based on this data set.
+
+```{r}
+
+```
+
+
+#### Find familywise 95% Confidence Intervals
+
+The code below finds individual 95% confidence intervals for the 5 differences in group means the researchers planned for this study.  For each, add calculations of appropriately adjusted Bonferroni and Scheffe familywise intervals.
+
+```{r}
+anova_fit <- lm(Lifetime ~ Diet, data = longevity)
+```
+
+#### (a) $H_0: \mu_2 = \mu_3$ vs $H_A: \mu_2 \neq \mu_3$.  Are the population mean lifetimes the same for the \textbf{N/N85} and \textbf{N/R50} groups?
+
+```{r}
+fit.contrast(anova_fit, "Diet", c(0, 1, -1, 0, 0, 0), conf.int = 0.95)
+```
+
+#### (b) $H_0: \mu_3 = \mu_4$ vs $H_A: \mu_3 \neq \mu_4$.  Are the population mean lifetimes the same for the \textbf{N/R50} and \textbf{R/R50} groups?
+
+```{r}
+fit.contrast(anova_fit, "Diet", c(0, 0, 1, -1, 0, 0), conf.int = 0.95)
+```
+
+#### (c) $H_0: \mu_3 = \mu_6$ vs $H_A: \mu_3 \neq \mu_6$.  Are the population mean lifetimes the same for the \textbf{N/R50} and \textbf{N/R40} groups?
+
+```{r}
+fit.contrast(anova_fit, "Diet", c(0, 0, 1, 0, 0, -1), conf.int = 0.95)
+```
+
+#### (d) $H_0: \mu_3 = \mu_5$ vs $H_A: \mu_3 \neq \mu_5$.  Are the population mean lifetimes the same for the \textbf{N/R50} and \textbf{N/R50} lopro groups?
+
+```{r}
+fit.contrast(anova_fit, "Diet", c(0, 0, 1, 0, -1, 0), conf.int = 0.95)
+```
+
+#### (e) $H_0: \mu_2 = \mu_1$ vs $H_A: \mu_2 \neq \mu_1$.  Are the population mean lifetimes the same for the \textbf{N/N85} and \textbf{NP} groups?
+
+```{r}
+fit.contrast(anova_fit, "Diet", c(-1, 1, 0, 0, 0, 0), conf.int = 0.95)
+```
+
+#### What is the interpretation of the individual 95% confidence interval obtained in part (a) from the fit.contrast function?
+
+
+
+#### What is the interpretation of the Bonferroni intervals?  
+
+
